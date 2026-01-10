@@ -43,5 +43,11 @@ export const ICONS = {
   portfolio:require('../Assets/Icons/portfolio.png'),
   research:require('../Assets/Icons/research.png'),
   greengraph:require('../Assets/Icons/greengraph.png'),
+  usericon:require('../Assets/Icons/usericon.png'),
+  setting:require('../Assets/Icons/settingicon.png'),
+  PowerIcon:require('../Assets/Icons/PowerIcon.png'),
+  language:require('../Assets/Icons/languageicon.png'),
+  closeicon:require('../Assets/Icons/closeicon.png'),
+  logout:require('../Assets/Icons/logout.png'),
 
 };

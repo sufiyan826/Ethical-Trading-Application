@@ -25,7 +25,9 @@ const PortfolioScreen = ({navigation}: any) => {
 
    
         <View style={styles.header}>
-          <Image source={IMAGES.user} style={styles.avatar} />
+            <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen')}>
+                   <Image source={IMAGES.user} style={styles.avatar} />
+                 </TouchableOpacity>
           <Text style={styles.headerTitle}>Portfolio</Text>
 
           <TouchableOpacity style={styles.iconBtn}>

@@ -12,10 +12,17 @@ import {
 import {IMAGES, ICONS} from '../../Constants/IMAGES';
 import {COLORS} from '../../Constants/COLORS';
 import {Dimensions} from 'react-native';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
 
 const {width, height} = Dimensions.get('window');
 
+type RootStackParamList = {
+  ProfileScreen: undefined;
+};
+
 const ResearchScreen = () => {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  
   return (
     <ImageBackground
       source={IMAGES.Homebg2}
@@ -26,7 +33,9 @@ const ResearchScreen = () => {
 
      
         <View style={styles.header}>
-          <Image source={IMAGES.user} style={styles.avatar} />
+              <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen')}>
+                     <Image source={IMAGES.user} style={styles.avatar} />
+                   </TouchableOpacity>
           <Text style={styles.headerTitle}>Research</Text>
           <TouchableOpacity style={styles.iconBtn}>
             <Image source={ICONS.Bell} style={styles.icon} />
@@ -37,7 +46,7 @@ const ResearchScreen = () => {
         <View style={styles.searchBox}>
           <TextInput
             placeholder="Search Here"
-            placeholderTextColor="#aaa"
+            placeholderTextColor={COLORS.slowhgray}
             style={styles.searchInput}
           />
           <View style={styles.searchIconBox}>

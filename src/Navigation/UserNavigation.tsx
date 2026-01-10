@@ -17,7 +17,7 @@ import WellcomeScreen4 from '../Screens/AuthScreen/Wellcomescreen4';
 import LoginScreen from '../Screens/AuthScreen/LoginSceen';
 import SignUp from '../Screens/AuthScreen/SignUp';
 import BottomNavigation from './BottomNavigation';
-
+import ProfileScreen from '../Screens/UserScreen/ProfileScreen';
 
 // Bottom Tabs
 
@@ -37,6 +37,7 @@ type UserStackParamList = {
   LoginScreen:undefined;
   SignUp:undefined;
   BottomNavigation: undefined;
+  ProfileScreen:undefined
 };
 
 const Stack = createNativeStackNavigator<UserStackParamList>();
@@ -65,6 +66,7 @@ const UserNavigation: React.FC = () => {
           <Stack.Screen name="Community" component={CommunityScreen} />
           <Stack.Screen name="MicroSoft" component={MicroSoftScreen} />
           <Stack.Screen name="Achevement" component={AchevementScreen} />
+          <Stack.Screen name='ProfileScreen' component={ProfileScreen} />
 
     </Stack.Navigator>
   );

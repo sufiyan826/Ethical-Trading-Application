@@ -45,7 +45,9 @@ const HomeScreen = () => {
        
         <View style={styles.header}>
           <View style={styles.userRow}>
-            <Image source={IMAGES.user} style={styles.avatar} />
+            <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen')}>
+              <Image source={IMAGES.user} style={styles.avatar} />
+            </TouchableOpacity>
             <View>
               <Text style={styles.userName}>Jack Reacher</Text>
               <Text style={styles.greeting}>Good Morning</Text>
@@ -133,8 +135,8 @@ const HomeScreen = () => {
                       styles.cardTrend,
                       {
                         color: item.positive
-                          ? '#4CFF8F'
-                          : '#FF4C4C',
+                          ? COLORS.green4
+                          : COLORS.lightred,
                       },
                     ]}>
                     {item.trend}

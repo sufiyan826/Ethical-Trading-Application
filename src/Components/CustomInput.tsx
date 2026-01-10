@@ -31,14 +31,13 @@ const CustomInput = ({
   const isEmail = name === 'email';
   const isPassword = name === 'password' || name === 'confirmPassword';
 
-  /* 🔹 ICON LOGIC */
+ 
   const leftIcon = isEmail
     ? ICONS.email
     : isPassword
     ? ICONS.Lock
     : null;
 
-  /* 🔹 PLACEHOLDER LOGIC */
   const inputPlaceholder =
     placeholder ||
     (name === 'email'

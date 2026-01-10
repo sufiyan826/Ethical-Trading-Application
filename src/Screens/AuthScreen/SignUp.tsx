@@ -6,12 +6,15 @@ import {
   Image,
   ImageBackground,
   TouchableOpacity,
+  ScrollView,
+  Dimensions,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {IMAGES, ICONS} from '../../Constants/IMAGES';
+import {IMAGES} from '../../Constants/IMAGES';
 import {COLORS} from '../../Constants/COLORS';
 import CustomInput from '../../Components/CustomInput';
-import CustomButton from '../../Components/CustomButton';
+
+const {width, height} = Dimensions.get('window');
 
 const SignUpScreen = () => {
   const navigation = useNavigation<any>();
@@ -34,60 +37,57 @@ const SignUpScreen = () => {
       style={styles.container}
       resizeMode="cover">
 
- 
-      <View style={styles.logoWrapper}>
-        <Image source={IMAGES.Ethical} style={styles.logo} />
-      </View>
+      <ScrollView>
 
-  
-      <Text style={styles.title}>Sign Up</Text>
+        <View style={styles.logoWrapper}>
+          <Image source={IMAGES.Ethical} style={styles.logo} />
+        </View>
 
-      <CustomInput
-        auth
-        name="email"
-        value={email}
-        handleInput={handleInput}
-      />
+        <Text style={styles.title}>Sign Up</Text>
 
-      <CustomInput
-        auth
-        name="password"
-        value={password}
-        secure={secure1}
-        setSecure={setSecure1}
-        handleInput={handleInput}
-      />
+        <CustomInput
+          auth
+          name="email"
+          value={email}
+          handleInput={handleInput}
+        />
 
-      <CustomInput
-        auth
-        name="confirmPassword"
-        value={confirmPassword}
-        secure={secure1}
-        setSecure={setSecure1}
-        handleInput={handleInput}
-        placeholder="Password"
-      />
+        <CustomInput
+          auth
+          name="password"
+          value={password}
+          secure={secure1}
+          setSecure={setSecure1}
+          handleInput={handleInput}
+        />
 
- <View style={styles.btnWrapper}>
-   <TouchableOpacity style={styles.Btn} onPress={()=>navigation.navigate('HomeScreen')}>
-     <Text style={styles.btntext}>Submit</Text>
-   </TouchableOpacity>
- </View>
- 
+        <CustomInput
+          auth
+          name="confirmPassword"
+          value={confirmPassword}
+          secure={secure2}
+          setSecure={setSecure2}
+          handleInput={handleInput}
+          placeholder="Confirm Password"
+        />
 
-      <TouchableOpacity
-        onPress={() => navigation.navigate('LoginScreen')}>
-        <Text style={styles.bottomText}>
-          Already have an account{' '}
-          <Text style={styles.signupText}>sign In</Text>
-        </Text>
-      </TouchableOpacity>
+        <View style={styles.btnWrapper}>
+          <TouchableOpacity
+            style={styles.Btn}
+            onPress={() => navigation.navigate('HomeScreen')}>
+            <Text style={styles.btntext}>Submit</Text>
+          </TouchableOpacity>
+        </View>
 
-     
+        <TouchableOpacity
+          onPress={() => navigation.navigate('LoginScreen')}>
+          <Text style={styles.bottomText}>
+            Already have an account{' '}
+            <Text style={styles.signupText}>sign In</Text>
+          </Text>
+        </TouchableOpacity>
 
-    
-   
-
+      </ScrollView>
     </ImageBackground>
   );
 };
@@ -95,10 +95,10 @@ const SignUpScreen = () => {
 export default SignUpScreen;
 
 const styles = StyleSheet.create({
-  container: {
+   container: {
     flex: 1,
-    paddingHorizontal: 24,
-    paddingTop: 70,
+    paddingHorizontal: width * 0.06,  
+    paddingTop: height * 0.080,       
   },
 
   logoWrapper: {
@@ -106,24 +106,24 @@ const styles = StyleSheet.create({
   },
 
   logo: {
-    width: 180,
-    height: 120,
+    width: width * 0.48,               
+    height: height * 0.16,             
     resizeMode: 'contain',
   },
 
   title: {
     color: COLORS.white,
-    fontSize: 35,
+    fontSize: width * 0.09,         
     fontWeight: '600',
     textAlign: 'center',
-    marginBottom: 60,
+    marginBottom: height * 0.07,        
   },
 
   bottomText: {
     color: COLORS.white,
-    fontSize: 16,
+    fontSize: width * 0.04,          
     textAlign: 'center',
-    marginTop: 20,
+    marginTop: height * 0.025,          
   },
 
   signupText: {
@@ -132,23 +132,24 @@ const styles = StyleSheet.create({
   },
 
   btnWrapper: {
-  alignItems: 'center',
-  marginTop:40,
-},
+    alignItems: 'center',
+    marginTop: height * 0.05,       
+  },
 
-Btn: {
-  width: 350,
-  height: 50,
-  backgroundColor: COLORS.white,
-  borderRadius: 25,
-  alignItems: 'center',
-  justifyContent: 'center',
-},
-btntext: {
-  color: COLORS.green2,
-  fontSize: 16,
-  fontWeight: '600',
-},
+  Btn: {
+    width: width * 0.86,            
+    height: height * 0.058,            
+    backgroundColor: COLORS.white,
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  btntext: {
+    color: COLORS.green2,
+    fontSize: width * 0.04,           
+    fontWeight: '600',
+  },
 
 
 });

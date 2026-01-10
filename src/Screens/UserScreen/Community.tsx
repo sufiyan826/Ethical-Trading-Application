@@ -9,13 +9,19 @@ import {
   TextInput,
   ImageBackground,
 } from 'react-native';
-import {IMAGES, ICONS} from '../../Constants/IMAGES';
-import {COLORS} from '../../Constants/COLORS';
+import { IMAGES, ICONS } from '../../Constants/IMAGES';
+import { COLORS } from '../../Constants/COLORS';
 import { Dimensions } from 'react-native';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get('window');
 
+type RootStackParamList = {
+  ProfileScreen: undefined;
+};
+
 const CommunityScreen = () => {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   return (
     <ImageBackground
       source={IMAGES.Homebg2}
@@ -24,9 +30,11 @@ const CommunityScreen = () => {
     >
       <ScrollView showsVerticalScrollIndicator={false}>
 
-    
+
         <View style={styles.header}>
-          <Image source={IMAGES.user} style={styles.avatar} />
+          <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen')}>
+            <Image source={IMAGES.user} style={styles.avatar} />
+          </TouchableOpacity>
 
           <Text style={styles.headerTitle}>Community</Text>
 
@@ -35,11 +43,11 @@ const CommunityScreen = () => {
           </TouchableOpacity>
         </View>
 
-      
+
         <View style={styles.searchBox}>
           <TextInput
             placeholder="Search Here"
-            placeholderTextColor="#aaa"
+            placeholderTextColor={COLORS.slowhgray}
             style={styles.searchInput}
           />
           <View style={styles.searchIconBox}>
@@ -47,7 +55,7 @@ const CommunityScreen = () => {
           </View>
         </View>
 
-     
+
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -62,26 +70,26 @@ const CommunityScreen = () => {
 
           <Image source={IMAGES.comunity} style={styles.cardImage} />
 
-       
+
           <View style={styles.cardRow}>
             <View>
               <Text style={styles.cardTitle}>FMS Stocks</Text>
               <Text style={styles.cardSub}>Project Name</Text>
             </View>
 
-            <View style={{alignItems: 'flex-end'}}>
+            <View style={{ alignItems: 'flex-end' }}>
               <Text style={styles.cardTitle}>New York, USA</Text>
               <Text style={styles.cardSub}>Location</Text>
             </View>
           </View>
 
-     
+
           <Text style={styles.description}>
             Lorem Ipsum is simply dummy text of the printing and
             typesetting industry.
           </Text>
 
-        
+
           <View style={styles.progressRow}>
             <Text style={styles.progressText}>Progress</Text>
             <Text style={styles.progressText}>80%</Text>
@@ -101,7 +109,7 @@ const CommunityScreen = () => {
 
         </View>
 
-        <View style={{height: 40}} />
+        <View style={{ height: 40 }} />
       </ScrollView>
     </ImageBackground>
   );
@@ -111,11 +119,11 @@ export default CommunityScreen;
 
 
 const styles = StyleSheet.create({
- 
+
   container: {
     flex: 1,
-    paddingHorizontal: width * 0.05,  
-    paddingTop: height * 0.070,      
+    paddingHorizontal: width * 0.05,
+    paddingTop: height * 0.070,
   },
 
   header: {
@@ -125,9 +133,9 @@ const styles = StyleSheet.create({
   },
 
   avatar: {
-    width: width * 0.15,               
+    width: width * 0.15,
     height: width * 0.15,
-    borderRadius: width * 0.075,      
+    borderRadius: width * 0.075,
   },
 
   headerTitle: {
@@ -135,7 +143,7 @@ const styles = StyleSheet.create({
     width: '100%',
     textAlign: 'center',
     color: COLORS.white,
-    fontSize: 27,                     
+    fontSize: 27,
     fontWeight: '600',
   },
 
@@ -149,30 +157,30 @@ const styles = StyleSheet.create({
   },
 
   icon: {
-    width: width * 0.07,              
+    width: width * 0.07,
     height: width * 0.07,
     tintColor: COLORS.white,
   },
 
 
   searchBox: {
-    marginTop: height * 0.028,         
+    marginTop: height * 0.028,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: 'rgba(255,255,255,0.12)',
     borderRadius: 35,
-    height: height * 0.068,           
-    paddingHorizontal: width * 0.045,  
+    height: height * 0.068,
+    paddingHorizontal: width * 0.045,
   },
 
   searchInput: {
     flex: 1,
     color: COLORS.white,
-    fontSize: 18,                      
+    fontSize: 18,
   },
 
   searchIconBox: {
-    width: width * 0.11,            
+    width: width * 0.11,
     height: width * 0.11,
     borderRadius: width * 0.055,
     backgroundColor: 'rgba(255,255,255,0.15)',
@@ -181,24 +189,24 @@ const styles = StyleSheet.create({
   },
 
   searchIcon: {
-    width: width * 0.045,             
+    width: width * 0.045,
     height: width * 0.045,
     tintColor: COLORS.slowhgray,
   },
 
 
   filterRow: {
-    marginTop: height * 0.022,       
+    marginTop: height * 0.022,
   },
 
   filter: {
-    paddingHorizontal: width * 0.07,  
-    paddingVertical: height * 0.010,   
+    paddingHorizontal: width * 0.07,
+    paddingVertical: height * 0.010,
     borderRadius: 22,
     backgroundColor: 'rgba(255,255,255,0.12)',
     color: COLORS.white,
-    marginRight: width * 0.05,         
-    fontSize: 15,                     
+    marginRight: width * 0.05,
+    fontSize: 15,
   },
 
   activeFilter: {
@@ -207,9 +215,9 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 
- 
+
   card: {
-    marginTop: height * 0.025,         
+    marginTop: height * 0.025,
     backgroundColor: 'rgba(255,255,255,0.10)',
     borderRadius: 26,
     padding: 16,
@@ -217,7 +225,7 @@ const styles = StyleSheet.create({
 
   cardImage: {
     width: '100%',
-    height: height * 0.19,         
+    height: height * 0.19,
     borderRadius: 20,
     marginBottom: 10,
   },
@@ -229,20 +237,20 @@ const styles = StyleSheet.create({
 
   cardTitle: {
     color: COLORS.white,
-    fontSize: 17,                   
+    fontSize: 17,
     fontWeight: '600',
     marginTop: 5,
   },
 
   cardSub: {
     color: COLORS.slowhgray,
-    fontSize: 16,                   
+    fontSize: 16,
     marginTop: 2,
   },
 
   description: {
     color: COLORS.slowhgray,
-    fontSize: 13,                    
+    fontSize: 13,
     marginTop: height * 0.011,
     lineHeight: 18,
   },
@@ -250,16 +258,16 @@ const styles = StyleSheet.create({
   progressRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: height * 0.020,      
+    marginTop: height * 0.020,
   },
 
   progressText: {
     color: COLORS.slowhgray,
-    fontSize: 16,                     
+    fontSize: 16,
   },
 
   progressBar: {
-    height: height * 0.014,            
+    height: height * 0.014,
     borderRadius: 8,
     backgroundColor: 'rgba(255,255,255,0.2)',
     marginTop: 6,
@@ -273,8 +281,8 @@ const styles = StyleSheet.create({
   },
 
   learnBtn: {
-    marginTop: height * 0.018,     
-    paddingVertical: height * 0.018,  
+    marginTop: height * 0.018,
+    paddingVertical: height * 0.018,
     borderRadius: 25,
     backgroundColor: 'rgba(255,255,255,0.15)',
     alignItems: 'center',
@@ -282,12 +290,12 @@ const styles = StyleSheet.create({
 
   learnText: {
     color: COLORS.white,
-    fontSize: 14,                    
+    fontSize: 14,
   },
 
   investBtn: {
-    marginTop: height * 0.012,         
-    paddingVertical: height * 0.018,   
+    marginTop: height * 0.012,
+    paddingVertical: height * 0.018,
     borderRadius: 25,
     backgroundColor: COLORS.green3,
     alignItems: 'center',
@@ -295,7 +303,7 @@ const styles = StyleSheet.create({
 
   investText: {
     color: '#000',
-    fontSize: 15,                      
+    fontSize: 15,
     fontWeight: '600',
   },
 
