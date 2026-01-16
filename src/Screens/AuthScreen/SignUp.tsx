@@ -13,23 +13,45 @@ import {useNavigation} from '@react-navigation/native';
 import {IMAGES} from '../../Constants/IMAGES';
 import {COLORS} from '../../Constants/COLORS';
 import CustomInput from '../../Components/CustomInput';
+import {SignUpUserAPI} from '../../Store/Action/AuthAction';
 
 const {width, height} = Dimensions.get('window');
 
 const SignUpScreen = () => {
   const navigation = useNavigation<any>();
-
+  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [secure1, setSecure1] = useState(true);
   const [secure2, setSecure2] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const handleInput = (name: string, text: string) => {
     if (name === 'email') setEmail(text);
     if (name === 'password') setPassword(text);
     if (name === 'confirmPassword') setConfirmPassword(text);
   };
+
+const onSubmit = () => {
+  if (!email || !password || !confirmPassword) {
+    return;
+  }
+
+  if (password !== confirmPassword) {
+    return;
+  }
+
+  const payload = {
+    email: email,
+    password: password,
+    givenName: 'John',
+    familyName: 'Doe',
+  };
+
+  console.log('Signup Payload ->', payload);
+  SignUpUserAPI(payload, setLoading, navigation);
+};
 
   return (
     <ImageBackground
@@ -45,12 +67,7 @@ const SignUpScreen = () => {
 
         <Text style={styles.title}>Sign Up</Text>
 
-        <CustomInput
-          auth
-          name="email"
-          value={email}
-          handleInput={handleInput}
-        />
+        <CustomInput auth name="email" value={email} handleInput={handleInput} />
 
         <CustomInput
           auth
@@ -72,18 +89,17 @@ const SignUpScreen = () => {
         />
 
         <View style={styles.btnWrapper}>
-          <TouchableOpacity
-            style={styles.Btn}
-            onPress={() => navigation.navigate('HomeScreen')}>
-            <Text style={styles.btntext}>Submit</Text>
+          <TouchableOpacity style={styles.Btn} onPress={onSubmit}>
+            <Text style={styles.btntext}>
+              {loading ? 'Please wait...' : 'Submit'}
+            </Text>
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity
-          onPress={() => navigation.navigate('LoginScreen')}>
+        <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')}>
           <Text style={styles.bottomText}>
             Already have an account{' '}
-            <Text style={styles.signupText}>sign In</Text>
+            <Text style={styles.signupText}>Sign In</Text>
           </Text>
         </TouchableOpacity>
 
@@ -93,6 +109,7 @@ const SignUpScreen = () => {
 };
 
 export default SignUpScreen;
+
 
 const styles = StyleSheet.create({
    container: {

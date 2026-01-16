@@ -3,7 +3,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // Screens
 import OnboardingScreen from '../Screens/AuthScreen/OnboardingScreen';
-import HomeScreen from '../Screens/UserScreen/HomeScreen';
 import Portfolio from '../Screens/UserScreen/Portfolio';
 import AIAssistant from '../Screens/UserScreen/AIAssitant';
 import ResearchScreen from '../Screens/UserScreen/Research';
@@ -19,55 +18,38 @@ import SignUp from '../Screens/AuthScreen/SignUp';
 import BottomNavigation from './BottomNavigation';
 import ProfileScreen from '../Screens/UserScreen/ProfileScreen';
 
-// Bottom Tabs
-
-type UserStackParamList = {
-  OnboardingScreen: undefined;
-  HomeScreen:undefined;
-  Portfolio:undefined;
-  AIAssistant:undefined;
-  Research:undefined;
-  Community:undefined;
-  MicroSoft:undefined;
-  Achevement:undefined;
-  WellcomeScreen1:undefined;
-  Wellcomescreen2:undefined;
-  WellcomeScreen3:undefined;
-  WellcomeScreen4:undefined;
-  LoginScreen:undefined;
-  SignUp:undefined;
-  BottomNavigation: undefined;
-  ProfileScreen:undefined
+type Props = {
+  isLoggedIn: boolean;
 };
 
-const Stack = createNativeStackNavigator<UserStackParamList>();
+const Stack = createNativeStackNavigator();
 
-const UserNavigation: React.FC = () => {
+const UserNavigation: React.FC<Props> = ({isLoggedIn}) => {
   return (
-    <Stack.Navigator initialRouteName= 'OnboardingScreen' screenOptions={{ headerShown: false }}>
-      {/* Login Screen */}
+    <Stack.Navigator
+      initialRouteName={isLoggedIn ? 'HomeScreen' : 'OnboardingScreen'}
+      screenOptions={{ headerShown: false }}
+    >
+      {/* Auth Screens */}
       <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} />
-         <Stack.Screen name="WellcomeScreen1" component={WellcomeScreen1} /> 
-          <Stack.Screen name="Wellcomescreen2" component={Wellcomescreen2} /> 
-          <Stack.Screen name="WellcomeScreen3" component={WellcomeScreen3} /> 
-          <Stack.Screen name='WellcomeScreen4' component={WellcomeScreen4} />
-          <Stack.Screen name = 'LoginScreen' component={LoginScreen} />
-          <Stack.Screen name = 'SignUp'   component={SignUp} />
+      <Stack.Screen name="WellcomeScreen1" component={WellcomeScreen1} />
+      <Stack.Screen name="Wellcomescreen2" component={Wellcomescreen2} />
+      <Stack.Screen name="WellcomeScreen3" component={WellcomeScreen3} />
+      <Stack.Screen name="WellcomeScreen4" component={WellcomeScreen4} />
+      <Stack.Screen name="LoginScreen" component={LoginScreen} />
+      <Stack.Screen name="SignUp" component={SignUp} />
 
+      {/* Home */}
+      <Stack.Screen name="HomeScreen" component={BottomNavigation} />
 
-      {/* Bottom Navigation as Home */}
-   <Stack.Screen name="HomeScreen" component={BottomNavigation} />
-
-
-      {/* Other Screens */}
-         <Stack.Screen name="Portfolio" component={Portfolio} />
-          <Stack.Screen name="AIAssistant" component={AIAssistant} />
-          <Stack.Screen name="Research" component={ResearchScreen} />
-          <Stack.Screen name="Community" component={CommunityScreen} />
-          <Stack.Screen name="MicroSoft" component={MicroSoftScreen} />
-          <Stack.Screen name="Achevement" component={AchevementScreen} />
-          <Stack.Screen name='ProfileScreen' component={ProfileScreen} />
-
+   
+      <Stack.Screen name="Portfolio" component={Portfolio} />
+      <Stack.Screen name="AIAssistant" component={AIAssistant} />
+      <Stack.Screen name="Research" component={ResearchScreen} />
+      <Stack.Screen name="Community" component={CommunityScreen} />
+      <Stack.Screen name="MicroSoft" component={MicroSoftScreen} />
+      <Stack.Screen name="Achevement" component={AchevementScreen} />
+      <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
     </Stack.Navigator>
   );
 };

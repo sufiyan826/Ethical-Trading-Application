@@ -8,20 +8,23 @@ import {
   ScrollView,
   Alert,
   ActivityIndicator,
-  StyleSheet
+  StyleSheet,
+  Dimensions,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {IMAGES} from '../../Constants/IMAGES';
 import {COLORS} from '../../Constants/COLORS';
 import CustomInput from '../../Components/CustomInput';
-import { Dimensions } from 'react-native';
-   const {width, height} = Dimensions.get('window'); 
- 
+import {LoginUserAPI} from '../../Store/Action/AuthAction';
+
+const {width, height} = Dimensions.get('window');
+
 const LoginScreen = () => {
   const navigation = useNavigation<any>();
+
   const [form, setForm] = useState({
-    email: '',
-    password: '',
+    email: 'user@gmail.com',
+    password: '12345678aa',
   });
   const [secure, setSecure] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -32,52 +35,24 @@ const LoginScreen = () => {
       [name]: value,
     }));
   };
+
   const validateForm = () => {
     const {email, password} = form;
-
-    if (!email.trim()) {
-      Alert.alert('Error', 'Email is required');
+    if (!email || !password) {
+      Alert.alert('Error', 'Please fill in all fields');
       return false;
     }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      Alert.alert('Error', 'Enter a valid Email');
-      return false;
-    }
-
-    if (!password.trim()) {
-      Alert.alert('Error', 'Password is required');
-      return false;
-    }
-
-    if (password.length < 6) {
-      Alert.alert('Error', 'Password must be at least 6 characters');
-      return false;
-    }
-
     return true;
   };
 
-  const handleLogin = async () => {
+  const handleLogin = () => {
     if (!validateForm()) return;
 
-    try {
-      setLoading(true);
+    console.log('Login Payload ->', form);
 
-      console.log('Login Payload:', form);
-
-      setTimeout(() => {
-        setLoading(false);
-        navigation.navigate('Wellcomescreen1');
-      }, 1500);
-
-    } catch (error) {
-      setLoading(false);
-      Alert.alert('Error', 'Something went wrong');
-    }
+   
+    LoginUserAPI(form, setLoading, navigation);
   };
-
 
   return (
     <ImageBackground
@@ -139,6 +114,7 @@ const LoginScreen = () => {
 };
 
 export default LoginScreen;
+
 
 const styles = StyleSheet.create({
    container: {
