@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -9,164 +9,183 @@ import {
   TouchableOpacity,
   Dimensions,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
-import {IMAGES, ICONS} from '../../Constants/IMAGES';
-import {COLORS} from '../../Constants/COLORS';
-import {useNavigation} from '@react-navigation/native';
+import { IMAGES, ICONS } from '../../Constants/IMAGES';
+import { COLORS } from '../../Constants/COLORS';
+import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
+import { SearchCompanyAPI } from '../../Store/Action/AuthAction';
+import Loader from '../../Components/Loader';
 
-const {width, height} = Dimensions.get('window');
 
-const DATA = [
-  {
-    id: '1',
-    name: 'Forbes',
-    value: '45.34%',
-    trend: '+40%',
-    positive: true,
-    logo: ICONS.forbesion,
-  },
-  {
-    id: '2',
-    name: 'Gibs',
-    value: '53.34%',
-    trend: '-25%',
-    positive: false,
-    logo: ICONS.Gibesicon,
-  },
-];
+const { width, height } = Dimensions.get('window');
 
 const HomeScreen = () => {
   const navigation = useNavigation<any>();
 
+  const user = useSelector((state: any) => state.auth.userDetails);
+  const userName = `${user?.givenName || ''} ${user?.familyName || ''}`.trim();
+
+  const [companies, setCompanies] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    fetchCompanies();
+    console.log('HomeScreen mounted → fetching companies');
+  }, []);
+
+  const fetchCompanies = async () => {
+    try {
+      setLoading(true);
+      const res = await SearchCompanyAPI('popular', 10, 0);
+
+      setCompanies(res?.items || []);
+    } catch (error) {
+      console.log('Company API error ->', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <ImageBackground source={IMAGES.Homebg3} style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      {loading ? (
+        <Loader />
+      ) : (
+        <ScrollView showsVerticalScrollIndicator={false}>
 
-       
-        <View style={styles.header}>
-          <View style={styles.userRow}>
-            <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen')}>
-              <Image source={IMAGES.user} style={styles.avatar} />
+
+          <View style={styles.header}>
+            <View style={styles.userRow}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('ProfileScreen')}>
+                <Image source={IMAGES.user} style={styles.avatar} />
+              </TouchableOpacity>
+
+              <View>
+                <Text style={styles.userName}>{userName || 'User'}</Text>
+                <Text style={styles.greeting}>Good Morning</Text>
+              </View>
+            </View>
+
+            <TouchableOpacity
+              style={styles.bell}
+              onPress={() => navigation.navigate('Achevement')}>
+              <Image source={ICONS.Bell} style={styles.bellIcon} />
             </TouchableOpacity>
-            <View>
-              <Text style={styles.userName}>Jack Reacher</Text>
-              <Text style={styles.greeting}>Good Morning</Text>
+          </View>
+
+
+          <View style={styles.titleWrapper}>
+            <View style={styles.titleRow}>
+              <Text style={styles.bigText}>AI-SMART</Text>
+              <Image source={IMAGES.homeimage} style={styles.pillSmart} />
+            </View>
+
+            <View style={styles.titleRow}>
+              <Text style={styles.bigText}>TRADING</Text>
+              <Image source={IMAGES.doller} style={styles.pillTrading} />
+            </View>
+
+            <View style={styles.titleRow}>
+              <Image source={IMAGES.everyimage} style={styles.pillEveryone} />
+              <Text style={styles.bigText}>FOR EVERYONE.</Text>
             </View>
           </View>
 
-          <TouchableOpacity
-            style={styles.bell}
-            onPress={() => navigation.navigate('Achevement')}>
-            <Image source={ICONS.Bell} style={styles.bellIcon} />
-          </TouchableOpacity>
-        </View>
 
-    
-        <View style={styles.titleWrapper}>
-          <View style={styles.titleRow}>
-            <Text style={styles.bigText}>AI-SMART</Text>
-            <Image source={IMAGES.homeimage} style={styles.pillSmart} />
-          </View>
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Top Companies</Text>
+            <Text style={styles.sectionSub}>
+              Track your favourite companies
+            </Text>
 
-          <View style={styles.titleRow}>
-            <Text style={styles.bigText}>TRADING</Text>
-            <Image source={IMAGES.doller} style={styles.pillTrading} />
-          </View>
+            {loading ? (
+              <ActivityIndicator color={COLORS.white} />
+            ) : companies.length > 0 ? (
+              <FlatList
+                data={companies}
+                keyExtractor={(item, index) => item.symbol + index}
+                numColumns={2}
+                scrollEnabled={false}
+                columnWrapperStyle={styles.columnWrapper}
+                contentContainerStyle={{ marginTop: 16 }}
+                renderItem={({ item, index }) => {
+                  const isSecondRow = Math.floor(index / 2) % 2 === 1;
 
-          <View style={styles.titleRow}>
-            <Image source={IMAGES.everyimage} style={styles.pillEveryone} />
-            <Text style={styles.bigText}>FOR EVERYONE.</Text>
-          </View>
-        </View>
+                  return (
+                    <View
+                      style={[
+                        styles.card,
+                        {
+                          backgroundColor: isSecondRow
+                            ? '#3d1f1f'
+                            : '#1f3d2b',
+                        },
+                      ]}>
 
-       
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Top Companies</Text>
-          <Text style={styles.sectionSub}>
-            Track your favourite companies
-          </Text>
+                      <TouchableOpacity style={styles.cardArrow}>
+                        <Image
+                          source={ICONS.Arrow2}
+                          style={styles.cardArrowIcon}
+                        />
+                      </TouchableOpacity>
 
-          <View style={styles.filterRow}>
-            <Text style={styles.filter}>24H</Text>
-            <Text style={styles.filter}>Gainers</Text>
-            <Text style={styles.filter}>ASC</Text>
-          </View>
+                      <View style={styles.cardContent}>
+                        <View style={styles.cardTop}>
+                          <Image
+                            source={ICONS.forbesion}
+                            style={styles.companyLogo}
+                          />
+                          <Text
+                            style={styles.cardTitle}
+                            numberOfLines={1}>
+                            {item.name}
+                          </Text>
+                        </View>
 
-          <FlatList
-            data={DATA}
-            keyExtractor={item => item.id}
-            numColumns={2}
-            scrollEnabled={false}
-            columnWrapperStyle={styles.columnWrapper}
-            contentContainerStyle={{marginTop: 16}}
-            renderItem={({item}) => (
-              <View
-                style={[
-                  styles.card,
-                  {
-                    backgroundColor: item.positive
-                      ? '#1f3d2b'
-                      : '#3d1f1f',
-                  },
-                ]}>
+                        <Text style={styles.cardValue}>{item.symbol}</Text>
+                        <Text style={styles.cardValue}>{item.currency}</Text>
 
-             
-                <TouchableOpacity style={styles.cardArrow}>
-                  <Image
-                    source={ICONS.Arrow2}
-                    style={styles.cardArrowIcon}
-                  />
-                </TouchableOpacity>
+                        <Text style={styles.cardLabel}>Value</Text>
+                        <Text style={styles.cardValue}>
+                          {(Number(item.matchScore) * 100).toFixed(1)}%
+                        </Text>
 
-                <View style={styles.cardContent}>
+                        <Text style={styles.cardTrend}>{item.region}</Text>
+                      </View>
+                    </View>
+                  );
+                }}
+              />
+            ) : (
+              <View style={{ marginTop: 55, alignItems: 'center' }}>
+                <Text
+                  style={{
+                    color: COLORS.white,
+                    fontSize: 25,
 
-                  <View style={styles.cardTop}>
-                    <Image source={item.logo} style={styles.companyLogo} />
-                    <Text style={styles.cardTitle}>{item.name}</Text>
-                  </View>
-
-                  <View>
-                    <Text style={styles.cardLabel}>Value</Text>
-                    <Text style={styles.cardValue}>{item.value}</Text>
-                  </View>
-
-                  <Text
-                    style={[
-                      styles.cardTrend,
-                      {
-                        color: item.positive
-                          ? COLORS.green4
-                          : COLORS.lightred,
-                      },
-                    ]}>
-                    {item.trend}
-                  </Text>
-
-                  <Image
-                    source={
-                      item.positive
-                        ? ICONS.greengraph
-                        : ICONS.redgraph
-                    }
-                    style={styles.graph}
-                  />
-                </View>
+                  }}>
+                  No Data Available
+                </Text>
               </View>
             )}
-          />
-        </View>
+          </View>
 
-        <View style={styles.portfolio}>
-          <Text style={styles.portfolioTitle}>Portfolio</Text>
-          <Text style={styles.portfolioSub}>View Portfolio</Text>
-        </View>
 
-      </ScrollView>
+          <View style={styles.portfolio}>
+            <Text style={styles.portfolioTitle}>Portfolio</Text>
+            <Text style={styles.portfolioSub}>View Portfolio</Text>
+          </View>
+        </ScrollView>
+      )}
     </ImageBackground>
   );
 };
 
 export default HomeScreen;
+
 
 const styles = StyleSheet.create({
   container: {
@@ -269,7 +288,6 @@ const styles = StyleSheet.create({
 
   sectionSub: {
     color: COLORS.white,
-    opacity: 0.7,
     fontSize: width * 0.045,
     marginTop: 4,
   },
@@ -294,13 +312,13 @@ const styles = StyleSheet.create({
     marginBottom: 18,
   },
 
- card: {
-  width: width * 0.43,
-  height: 250,
-  borderRadius: 22,
-  padding: 16,
-  overflow: 'hidden', 
-},
+  card: {
+    width: width * 0.43,
+    height: 250,
+    borderRadius: 22,
+    padding: 16,
+    overflow: 'hidden',
+  },
 
   cardContent: {
     flex: 1,
@@ -359,23 +377,24 @@ const styles = StyleSheet.create({
   cardTrend: {
     fontSize: width * 0.045,
     fontWeight: '600',
+    color: COLORS.white
   },
 
-graph: {
-  position: 'absolute',
-  bottom: -15,
-  left: -25,        
-  right: -10,
-  width: '130%',
-  height: '55%',
-  resizeMode: 'cover',
-  opacity: 0.9,
-},
+  graph: {
+    position: 'absolute',
+    bottom: -15,
+    left: -25,
+    right: -10,
+    width: '130%',
+    height: '55%',
+    resizeMode: 'cover',
+    opacity: 0.9,
+  },
 
 
 
   portfolio: {
-    marginTop: -height * 0.01,
+    marginTop: height * 0.09,
   },
 
   portfolioTitle: {

@@ -25,7 +25,7 @@ export const LoginUserAPI = async (
       store.dispatch(setUserDetails(res.data.user));
       store.dispatch(setLoginUser());
 
-      showSuccess('Login successful');
+      showSuccess('Login successfully');
 
       navigation.reset({
         index: 0,
@@ -48,7 +48,6 @@ export const LoginUserAPI = async (
 };
 
 
-
 export const SignUpUserAPI = async (
   data: any,
   setLoad: (value: boolean) => void,
@@ -60,8 +59,8 @@ export const SignUpUserAPI = async (
     const res = await API.post(EndPoints.signUp, data);
 
     if (res?.status === 200) {
-      showSuccess('Signup successful');
-      navigation.navigate('LoginScreen');
+      showSuccess('Register Successfully');
+      navigation.navigate('HomeScreen');
     } else {
       showError('Signup failed');
     }
@@ -71,4 +70,22 @@ export const SignUpUserAPI = async (
   } finally {
     setLoad(false);
   }
+};
+
+
+export const LogoutUserAPI = async () => {
+  return API.post(EndPoints.logout);
+};
+
+
+export const SearchCompanyAPI = async (
+  query: string,
+  limit = 10,
+  offset = 0,
+) => {
+  const res = await API.get(
+    `${EndPoints.company}?query=${query}&limit=${limit}&offset=${offset}`,
+  );
+
+  return res?.data;
 };

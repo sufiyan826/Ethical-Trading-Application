@@ -7,25 +7,52 @@ import {
   ImageBackground,
   TouchableOpacity,
   Dimensions,
+  Alert,
 } from 'react-native';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
-import { IMAGES, ICONS } from '../../Constants/IMAGES';
-import { COLORS } from '../../Constants/COLORS';
+import {useNavigation, NavigationProp} from '@react-navigation/native';
+import {useDispatch} from 'react-redux';
 
-const { width, height } = Dimensions.get('window');
+import {IMAGES, ICONS} from '../../Constants/IMAGES';
+import {COLORS} from '../../Constants/COLORS';
+
+import {LogoutUserAPI} from '../../Store/Action/AuthAction';
+import {logOut} from '../../Store/Reducers/AuthReducer';
+import { showError } from '../../Constants/FlashMessage';
+
+const {width, height} = Dimensions.get('window');
 
 type RootStackParamList = {
   Achevement: undefined;
+  LoginScreen: undefined;
 };
 
 const ProfileScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const dispatch = useDispatch();
+
+
+  const handleLogout = async () => {
+    try {
+      await LogoutUserAPI();
+
+      dispatch(logOut()); 
+
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'LoginScreen'}],
+      });
+    } catch (error) {
+      console.log('Logout error ->', error);
+
+      showError('Logout Failed: Something went wrong while logging out');
+    }
+  };
+
   return (
     <ImageBackground
       source={IMAGES.Homebg2}
       style={styles.imagebg}
-      resizeMode="cover"
-    >
+      resizeMode="cover">
 
       <View style={styles.panel}>
 
@@ -38,7 +65,7 @@ const ProfileScreen = () => {
           </TouchableOpacity>
         </View>
 
-     
+       
         <View style={styles.infoRow}>
           <Image source={ICONS.usericon} style={styles.infoIcon} />
           <Text style={styles.infoText}>Ahmed</Text>
@@ -58,7 +85,9 @@ const ProfileScreen = () => {
 
         <View style={styles.divider} />
 
-        <TouchableOpacity style={styles.menuItem} onPress={()=>navigation.navigate('Achevement')}>
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => navigation.navigate('Achevement')}>
           <Image source={ICONS.PowerIcon} style={styles.menuIcon} />
           <Text style={styles.menuText}>Gamification</Text>
         </TouchableOpacity>
@@ -73,9 +102,9 @@ const ProfileScreen = () => {
           <Text style={styles.menuText}>Language</Text>
         </View>
 
-        <View style={{ flex: 1 }} />
+        <View style={{flex: 1}} />
 
-        <TouchableOpacity style={styles.menuItem1}>
+        <TouchableOpacity style={styles.menuItem1} onPress={handleLogout}>
           <Image source={ICONS.logout} style={styles.menuIcon} />
           <Text style={styles.menuText}>Log Out</Text>
         </TouchableOpacity>
@@ -86,6 +115,7 @@ const ProfileScreen = () => {
 };
 
 export default ProfileScreen;
+
 const styles = StyleSheet.create({
   imagebg: {
     flex: 1,
