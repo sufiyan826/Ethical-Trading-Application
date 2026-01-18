@@ -125,7 +125,7 @@ const HomeScreen = () => {
                         },
                       ]}>
 
-                      <TouchableOpacity style={styles.cardArrow}>
+                      <TouchableOpacity style={styles.cardArrow} onPress={()=>navigation.navigate('Portfolio')}>
                         <Image
                           source={ICONS.Arrow2}
                           style={styles.cardArrowIcon}
@@ -394,7 +394,7 @@ const styles = StyleSheet.create({
 
 
   portfolio: {
-    marginTop: height * 0.09,
+    marginTop: -height * 0.01,
   },
 
   portfolioTitle: {
